@@ -10,7 +10,7 @@ class SpaceDay < Gosu::Window
     super GAME_WIDTH, GAME_HEIGHT
     self.caption = "Space Day!"
     @background_image = Gosu::Image.new("assets/background.jpg", tileable: true)
-    @dodge_area = DodgeArea.new
+    @dodge_area = DodgeArea.new({w: GAME_WIDTH, h: GAME_HEIGHT})
   end
 
   def update
