@@ -43,8 +43,14 @@ class DodgeArea
     x_comp = Math::cos(rads) * amt
     factor = -1
     factor = 1 if direction == :backward
-    @ship_position[:x] = @ship_position[:x] + (factor * x_comp)
-    @ship_position[:y] = @ship_position[:y] + (factor * y_comp)
+    new_x = @ship_position[:x] + (factor * x_comp)
+    new_y = @ship_position[:y] + (factor * y_comp)
+    new_y = 0 if new_y < 0
+    new_x = 0 if new_x < 0
+    new_y = @dim[:h] if new_y > @dim[:h]
+    new_x = @dim[:w] if new_x > @dim[:w]
+    @ship_position[:x] = new_x
+    @ship_position[:y] = new_y
   end
 
   def calc_new_rotation(rot, amt)
@@ -88,6 +94,17 @@ class DodgeArea
     @sat_pos_2 = new_debris_position(@sat_pos_2)
   end
 
+  def collided?(pos1, pos2)
+    distance = Math.sqrt(((pos1[:x] - pos2[:x])**2) + ((pos1[:y]-pos2[:y])**2))
+    return distance < 50
+  end
+
+  def check_crash
+    if collided?(@ship_position, @sat_pos) || collided?(@ship_position, @sat_pos_2)
+      reset_level!
+    end
+  end
+
   def tick(kb=Gosu)
     if kb.button_down?(Gosu::KB_LEFT)
       update_rotation(:right)
@@ -106,6 +123,7 @@ class DodgeArea
       update_position(:backward, rot)
     end
     update_obstacles
+    check_crash
   end
 
   def draw_ship
