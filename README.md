@@ -1,8 +1,14 @@
 # Space Day!
 
-Weekend fun with eldest daughter.  Aspirational goal is multiple levels
+Weekend fun with my eldest daughter (she's designing the game, I'm just implementing).  Aspirational goal is multiple levels
 of space dodging and planet landing.  Currently you can drive a rocketship around
-a starfield ;).
+a starfield, avoid obstacles to get to planets...
+
+![FlyAway](/assets/screenshots/shot1.png)
+
+... and watch cutscenes in between levels. :D
+
+![Landing](/assets/screenshots/shot2.png)
 
 ## Setup
 
