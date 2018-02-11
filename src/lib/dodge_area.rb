@@ -2,6 +2,7 @@ require 'securerandom'
 
 class DodgeArea
   def initialize(dim)
+    @background_image = Gosu::Image.new("assets/background.jpg", tileable: true)
     @ship_image = Gosu::Image.new("assets/ship.png")
     @planet_image = Gosu::Image.new("assets/planet1.png")
     @satellite_image = Gosu::Image.new("assets/satellite2.png")
@@ -144,6 +145,10 @@ class DodgeArea
     @planet_image.draw(x, y, z, scale, scale)
   end
 
+  def planetfall?
+    return @ship_position[:x] > 800 && @ship_position[:y] < 120
+  end
+
   def draw_obstacles
     x = @sat_pos[:x]
     y = @sat_pos[:y]
@@ -161,6 +166,7 @@ class DodgeArea
   end
 
   def draw
+    @background_image.draw(0,0,0)
     draw_ship
     draw_planet
     draw_obstacles
