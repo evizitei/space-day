@@ -10,7 +10,7 @@ To run this on your own machine, check out the repo, and make sure
 you have ruby 2.4.1 installed one way or another (rbenv would be a great
   choice).
 
-Ruby Tanks is built on top of Gosu, which is dependent on http://www.libsdl.org/,
+Space Day is built on top of Gosu, which is dependent on http://www.libsdl.org/,
 so before you do anything else you'll need to have that installed. If you're
 on a Mac with homebrew, it's just:
 
@@ -35,3 +35,4 @@ To start the game, you can use the script at "bin/play":
 
 * In space, there is apparently no momentum ;)
 * arrow keys move, you'll stop when not pressing keys
+* Make it to the planet to see the victory scene

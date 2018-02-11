@@ -6,6 +6,8 @@ class LanderScene
     @flame_image = Gosu::Image.new("assets/engine-flame.png")
     @astronaut_image = Gosu::Image.new("assets/astronaut.png")
     @dim = dim
+    @done = false
+    @start_time = -1
     reset_level!
   end
 
@@ -103,6 +105,12 @@ class LanderScene
     if @landed && !@fanfare_played
       play_victory_sound
       @fanfare_played = true
+      @start_time = Gosu.milliseconds
+    end
+
+    if @start_time >= 0
+      elapsed = Gosu.milliseconds - @start_time
+      @done = true if elapsed > 5000
     end
   end
 
@@ -112,6 +120,10 @@ class LanderScene
       update_position
       slow_down
     end
+  end
+
+  def done?
+    @done
   end
 
 end

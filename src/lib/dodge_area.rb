@@ -1,13 +1,13 @@
 require 'securerandom'
+require_relative './fly_level'
 
-class DodgeArea
+class DodgeArea < FlyLevel
   def initialize(dim)
+    super(dim)
     @background_image = Gosu::Image.new("assets/background.jpg", tileable: true)
-    @ship_image = Gosu::Image.new("assets/ship.png")
     @planet_image = Gosu::Image.new("assets/planet1.png")
     @satellite_image = Gosu::Image.new("assets/satellite2.png")
     @satellite_image_2 = Gosu::Image.new("assets/satellite.png")
-    @dim = dim
     reset_level!
   end
 
@@ -27,50 +27,9 @@ class DodgeArea
   end
 
   def reset_level!
-    @ship_position = {
-      x: 30,
-      y: 680,
-      rot: 90
-    }
+    super
     @sat_pos = random_init
     @sat_pos_2 = random_init
-  end
-
-  def update_position(direction, rot)
-    amt = 3
-    useful_rot = calc_new_rotation(rot, 90)
-    rads = useful_rot * ((2*Math::PI) / 360)
-    y_comp = Math::sin(rads) * amt
-    x_comp = Math::cos(rads) * amt
-    factor = -1
-    factor = 1 if direction == :backward
-    new_x = @ship_position[:x] + (factor * x_comp)
-    new_y = @ship_position[:y] + (factor * y_comp)
-    new_y = 0 if new_y < 0
-    new_x = 0 if new_x < 0
-    new_y = @dim[:h] if new_y > @dim[:h]
-    new_x = @dim[:w] if new_x > @dim[:w]
-    @ship_position[:x] = new_x
-    @ship_position[:y] = new_y
-  end
-
-  def calc_new_rotation(rot, amt)
-    new_rot = rot + amt
-    if new_rot > 360
-      new_rot = new_rot - 360
-    elsif new_rot < 0
-      new_rot = 360 + new_rot
-    end
-    return new_rot
-  end
-
-  def update_rotation(direction)
-    rot = @ship_position[:rot]
-    rotation_amount = 3
-    factor = -1
-    factor = 1 if direction == :left
-    new_rot = calc_new_rotation(rot, (rotation_amount * factor))
-    @ship_position[:rot] = new_rot
   end
 
   def new_debris_position(pos)
@@ -106,35 +65,10 @@ class DodgeArea
     end
   end
 
-  def tick(kb=Gosu)
-    if kb.button_down?(Gosu::KB_LEFT)
-      update_rotation(:right)
-    end
-
-    if kb.button_down?(Gosu::KB_RIGHT)
-      update_rotation(:left)
-    end
-
-    rot = @ship_position[:rot]
-    if kb.button_down?(Gosu::KB_UP)
-      update_position(:forward, rot)
-    end
-
-    if kb.button_down?(Gosu::KB_DOWN)
-      update_position(:backward, rot)
-    end
+  def tick()
+    move_ship
     update_obstacles
     check_crash
-  end
-
-  def draw_ship
-    x = @ship_position[:x]
-    y = @ship_position[:y]
-    z = 3
-    rot = @ship_position[:rot]
-    center = 0.5
-    scale = 0.05
-    @ship_image.draw_rot(x, y, z, rot, center, center, scale, scale)
   end
 
   def draw_planet
@@ -143,10 +77,6 @@ class DodgeArea
     z = 2
     scale = 0.2
     @planet_image.draw(x, y, z, scale, scale)
-  end
-
-  def planetfall?
-    return @ship_position[:x] > 800 && @ship_position[:y] < 120
   end
 
   def draw_obstacles
