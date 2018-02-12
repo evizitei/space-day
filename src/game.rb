@@ -14,8 +14,9 @@ class SpaceDay < Gosu::Window
     self.caption = "Space Day!"
     @levels = [
       DodgeArea.new(@dim),
-      LanderScene.new(@dim),
-      AlienInvasion.new(@dim)
+      LanderScene.new(@dim, background: 0),
+      AlienInvasion.new(@dim),
+      LanderScene.new(@dim, background: 1)
     ]
     @level_idx = -1
     next_level

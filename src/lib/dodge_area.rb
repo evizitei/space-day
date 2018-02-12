@@ -14,13 +14,12 @@ class DodgeArea < FlyLevel
   def random_init
     x_seed = SecureRandom.rand
     y_seed = SecureRandom.rand
-    rot_seed = SecureRandom.rand
     xs_seed = SecureRandom.rand
     ys_seed = SecureRandom.rand
     {
       x: x_seed * @dim[:w],
       y: y_seed * @dim[:h],
-      rot: rot_seed * 360,
+      rot: random_rotation,
       x_speed: (xs_seed * 6) - 3,
       y_speed: (ys_seed * 6) - 3
     }
@@ -52,11 +51,6 @@ class DodgeArea < FlyLevel
   def update_obstacles
     @sat_pos = new_debris_position(@sat_pos)
     @sat_pos_2 = new_debris_position(@sat_pos_2)
-  end
-
-  def collided?(pos1, pos2)
-    distance = Math.sqrt(((pos1[:x] - pos2[:x])**2) + ((pos1[:y]-pos2[:y])**2))
-    return distance < 50
   end
 
   def check_crash

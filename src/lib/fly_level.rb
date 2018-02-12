@@ -1,3 +1,5 @@
+require 'securerandom'
+
 class FlyLevel
   def initialize(dim)
     @dim = dim
@@ -10,6 +12,10 @@ class FlyLevel
       y: 680,
       rot: 90
     }
+  end
+
+  def random_rotation
+    SecureRandom.rand * 360
   end
 
   def calc_new_rotation(rot, amt)
@@ -31,6 +37,18 @@ class FlyLevel
     @ship_position[:rot] = new_rot
   end
 
+  def move_by(x, y, rot, speed: 1)
+    useful_rot = calc_new_rotation(rot, 90)
+    rads = useful_rot * ((2*Math::PI) / 360)
+    x_comp = Math::cos(rads) * speed
+    y_comp = Math::sin(rads) * speed
+    factor = -1
+    return {
+      x: x + (factor * x_comp),
+      y: y + (factor * y_comp)
+    }
+  end
+
   def update_position(direction, rot)
     amt = 3
     useful_rot = calc_new_rotation(rot, 90)
@@ -47,6 +65,11 @@ class FlyLevel
     new_x = @dim[:w] if new_x > @dim[:w]
     @ship_position[:x] = new_x
     @ship_position[:y] = new_y
+  end
+
+  def collided?(pos1, pos2, threshold: 50)
+    distance = Math.sqrt(((pos1[:x] - pos2[:x])**2) + ((pos1[:y]-pos2[:y])**2))
+    return distance < threshold
   end
 
   def move_ship(kb=Gosu)

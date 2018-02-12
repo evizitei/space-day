@@ -1,7 +1,12 @@
 
 class LanderScene
-  def initialize(dim)
-    @background_image = Gosu::Image.new("assets/lander_background.jpg", tileable: true)
+  BGS = [
+    "assets/lander_background.jpg",
+    "assets/level2/lander_background.jpg"
+  ]
+  def initialize(dim, background: 0)
+    img = BGS[background]
+    @background_image = Gosu::Image.new(img, tileable: true)
     @ship_image = Gosu::Image.new("assets/ship.png")
     @flame_image = Gosu::Image.new("assets/engine-flame.png")
     @astronaut_image = Gosu::Image.new("assets/astronaut.png")
