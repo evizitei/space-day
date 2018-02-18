@@ -14,8 +14,41 @@ class FlyLevel
     }
   end
 
+  def random_init
+    x_seed = SecureRandom.rand
+    y_seed = SecureRandom.rand
+    {
+      x: x_seed * @dim[:w],
+      y: y_seed * @dim[:h],
+      rot: random_rotation,
+      x_speed: random_speed,
+      y_speed: random_speed
+    }
+  end
+
   def random_rotation
     SecureRandom.rand * 360
+  end
+
+  def random_speed
+    (SecureRandom.rand * 6) - 3
+  end
+
+  def new_position(pos)
+    xs = pos[:x_speed]
+    ys = pos[:y_speed]
+    if (pos[:x] < 0 && xs < 0) || (pos[:x] > @dim[:w] && xs > 0)
+      xs = xs * -1
+    end
+    if (pos[:y] < 0 && ys < 0) || (pos[:y] > @dim[:h] && ys > 0)
+      ys = ys * -1
+    end
+    return pos.merge({
+      x: pos[:x] + pos[:x_speed],
+      y: pos[:y] + pos[:y_speed],
+      x_speed: xs,
+      y_speed: ys
+    })
   end
 
   def calc_new_rotation(rot, amt)

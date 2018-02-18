@@ -11,46 +11,15 @@ class DodgeArea < FlyLevel
     reset_level!
   end
 
-  def random_init
-    x_seed = SecureRandom.rand
-    y_seed = SecureRandom.rand
-    xs_seed = SecureRandom.rand
-    ys_seed = SecureRandom.rand
-    {
-      x: x_seed * @dim[:w],
-      y: y_seed * @dim[:h],
-      rot: random_rotation,
-      x_speed: (xs_seed * 6) - 3,
-      y_speed: (ys_seed * 6) - 3
-    }
-  end
-
   def reset_level!
     super
     @sat_pos = random_init
     @sat_pos_2 = random_init
   end
 
-  def new_debris_position(pos)
-    xs = pos[:x_speed]
-    ys = pos[:y_speed]
-    if (pos[:x] < 0 && xs < 0) || (pos[:x] > @dim[:w] && xs > 0)
-      xs = xs * -1
-    end
-    if (pos[:y] < 0 && ys < 0) || (pos[:y] > @dim[:h] && ys > 0)
-      ys = ys * -1
-    end
-    return pos.merge({
-      x: pos[:x] + pos[:x_speed],
-      y: pos[:y] + pos[:y_speed],
-      x_speed: xs,
-      y_speed: ys
-    })
-  end
-
   def update_obstacles
-    @sat_pos = new_debris_position(@sat_pos)
-    @sat_pos_2 = new_debris_position(@sat_pos_2)
+    @sat_pos = new_position(@sat_pos)
+    @sat_pos_2 = new_position(@sat_pos_2)
   end
 
   def check_crash

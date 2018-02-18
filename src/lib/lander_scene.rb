@@ -2,7 +2,8 @@
 class LanderScene
   BGS = [
     "assets/lander_background.jpg",
-    "assets/level2/lander_background.jpg"
+    "assets/level2/lander_background.jpg",
+    "assets/level3/lander_background.jpg"
   ]
   def initialize(dim, background: 0)
     img = BGS[background]
